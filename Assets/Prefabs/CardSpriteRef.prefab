@@ -30,7 +30,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b790f9df7ac3c64480b3ef5bbf8f20e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardBack: {fileID: 21300000, guid: 974608ac9f528784a95dd32ad83c1720, type: 3}
+  cardBack: {fileID: 21300000, guid: 8843490357e387d42a49397d2606f263, type: 3}
   Spades:
   - {fileID: -804935678, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
   - {fileID: 1930592263, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
