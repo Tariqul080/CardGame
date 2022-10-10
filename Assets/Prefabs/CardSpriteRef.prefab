@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3528227344488433207
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3528227344488433204}
+  - component: {fileID: 3528227344488433205}
+  m_Layer: 5
+  m_Name: CardSpriteRef
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3528227344488433204
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528227344488433207}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3528227344488433205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3528227344488433207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b790f9df7ac3c64480b3ef5bbf8f20e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardBack: {fileID: 21300000, guid: 974608ac9f528784a95dd32ad83c1720, type: 3}
+  Spades:
+  - {fileID: -804935678, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: 1930592263, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: -1554019524, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: 1807602331, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: -216308471, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: -2130035731, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: 1000878753, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: -68466068, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: -624635555, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: -2063964924, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: -1801176459, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: 422052482, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  - {fileID: -925362405, guid: e569f02027a7c644b8ed27365f3cbfc0, type: 3}
+  Hearts:
+  - {fileID: -334164350, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: -37101639, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: 1738082730, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: 201886588, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: -211186729, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: 336982733, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: 1248162867, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: -691137941, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: -1000989033, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: 937080924, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: -783382978, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: -1446160549, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  - {fileID: -1069733722, guid: d5430cb85eecce241a6b376c1a40beea, type: 3}
+  Clovers:
+  - {fileID: -2084809257, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: -1223094898, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: -1713577079, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: -1179320887, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: -2146059279, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: -1502785751, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: -1028986091, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: 2069653537, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: 1053952138, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: 748963290, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: -1801413912, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: 41663333, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  - {fileID: -636715890, guid: f92fd0a2744006b40bbcbcfde453a4ae, type: 3}
+  Diamonds:
+  - {fileID: -477020446, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: 1006148515, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: -219775787, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: -42781047, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: 806062264, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: 492875199, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: 335032151, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: 921730465, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: 1845591531, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: 522616024, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: -2088674749, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: -2131434894, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
+  - {fileID: -1478925781, guid: 438fad2683a55a741bd7882f5d308dc3, type: 3}
