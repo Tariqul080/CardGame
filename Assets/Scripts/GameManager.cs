@@ -20,12 +20,117 @@ namespace CallBreak {
         private Card[] playingCards = new Card[4];
         private Player[] playingPlayers = new Player[4];
         private int playingCardIndex = 0;
+        
 
         public void AddPlayingCard(Card card, Player player) {
             if (playingCardIndex < 4) {
                 playingCards[playingCardIndex] = card;
                 playingPlayers[playingCardIndex] = player;
                 playingCardIndex++;
+            }
+        }
+
+        public bool CheckBottonPlayerValidClick(Card card) {
+            //if table empty Play selected card 
+            if (IsBoardEmpty()) {
+                return true;
+            }
+
+            // check selected type card 
+            Card firstCard = playingCards[0];
+            if (firstCard.type == card.type) {
+                Card bigerPlayingCard = playingCards[0];
+                for (int i = 1; i < 4; i++) {
+                    if (playingCards[i] != null) {
+                        if (playingCards[i].type == bigerPlayingCard.type) {
+                            if ((int)playingCards[i].cName > (int)bigerPlayingCard.cName) {
+                                bigerPlayingCard = playingCards[i];
+                            }
+                        }
+                    }
+                }
+                if ((int)card.cName > (int)bigerPlayingCard.cName) {
+                    return true;
+                }
+
+                for (int i = 0; i < 13; i++) {
+                    if (bottomPlayerCards[i] != null && bottomPlayerCards[i].type == bigerPlayingCard.type) {
+                        if ((int)bottomPlayerCards[i].cName > (int)bigerPlayingCard.cName) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            }
+            else {
+                if (card.type == CardType.Spade) {
+                    // check I have first card type or not 
+                    for (int i = 0; i < 13; i++) {
+                        if (bottomPlayerCards[i] != null) {
+                            if (bottomPlayerCards[i].type == firstCard.type) { // I have first card type so super card can not play
+                                return false;
+                            }
+                        }
+                    }
+                    // I have no first card type 
+                    // Check super card on table or not
+                    Card bigerSuperCard = null;
+                    for (int i = 0; i < 4; i++) {
+                        if (playingCards[i] != null) {
+                            if (playingCards[i].type == CardType.Spade) {
+                                if (bigerSuperCard == null) {
+                                    bigerSuperCard = playingCards[i];
+                                }
+                                else {
+                                    if ((int)bigerSuperCard.cName < (int)playingCards[i].cName) {
+                                        bigerSuperCard = playingCards[i];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // No super card found on table 
+                    if (bigerSuperCard == null) {
+                        return true;
+                    }
+                    else { // super card found on table 
+                        if((int)card.cName > (int)bigerSuperCard.cName) {
+                            return true;
+                        }
+                        // find my biger super card .
+                        Card myBigerSuperCard = card;
+                        for(int i = 0; i < 13; i++) {
+                            if(bottomPlayerCards[i] != null && bottomPlayerCards[i].type == CardType.Spade) {
+                                if((int)bottomPlayerCards[i].cName > (int)myBigerSuperCard.cName) {
+                                    myBigerSuperCard = bottomPlayerCards[i];
+                                }
+                            }
+                        }
+                        // Compare biger super card 
+                        if ((int)myBigerSuperCard.cName > (int)card.cName) {
+                            return false;
+                        }
+                        return true;
+                    }
+                }
+                else {
+                    for (int i = 0; i < 13 ; i++) {
+                        if (bottomPlayerCards[i] != null) {
+                            if (playingCards[0].type == bottomPlayerCards[i].type) {
+                                return false;
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < 13; i++) {
+                        if (bottomPlayerCards[i] != null) {
+                            if (bottomPlayerCards[i].type == CardType.Spade) {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                }
             }
         }
 
@@ -145,14 +250,7 @@ namespace CallBreak {
 
             return null;
         }
-    
-        public bool IsCardValidForMoveByPlayer(Card card) {
-            if (IsBoardEmpty()) {
-                return true;
-            }
-            
-            return false;
-        }
+
         // Get round
         private Player RoundWinner() {
             // check super card

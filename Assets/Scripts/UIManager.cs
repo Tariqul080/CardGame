@@ -110,7 +110,9 @@ namespace CallBreak {
 
         private void ClickCard(Card card) {
             if (gameManager.runingPlayer == Player.Bottom) {
-                if (gameManager.IsCardValidForMoveByPlayer(card)) {
+                 Debug.Log("Selected card is invalid!   333");
+                if (gameManager.CheckBottonPlayerValidClick(card)) {
+                     Debug.Log("Selected card is invalid!   444");
                     playerCardCounter--;
                     card.transform.parent = allCardParent;
                     card.transform.localPosition = cardOnBoard[0].localPosition;
