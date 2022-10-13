@@ -6,7 +6,7 @@ namespace CallBreak {
     }
 
     public class GameManager : MonoBehaviour {
-        [SerializeField] private UIManager uIManager = null;
+        [SerializeField] private UIManager uiManager = null;
         [SerializeField] private CardSpriteRef cardSpriteRef = null;
 
         [HideInInspector] public Card[] bottomPlayerCards = new Card[13];
@@ -18,16 +18,37 @@ namespace CallBreak {
         [HideInInspector] public int round = 0;
 
         private Card[] playingCards = new Card[4];
+        private Player[] playingPlayers = new Player[4];
         private int playingCardIndex = 0;
 
-        public void AddPlayingCard(Card card) {
+        public void AddPlayingCard(Card card, Player player) {
             if (playingCardIndex < 4) {
                 playingCards[playingCardIndex] = card;
+                playingPlayers[playingCardIndex] = player;
                 playingCardIndex++;
             }
         }
 
-        public void ClearPlayingCard() {
+        private void RoundComplete() {
+            round++;
+            Player winner = RoundWinner();
+            ClearPlayingCard();
+            runingPlayer = winner;
+
+            if (round > 12) {
+                uiManager.GameOver();
+            }
+            else {
+                if (runingPlayer == Player.Bottom) {
+                    PlayBotPlayer();
+                }
+                else {
+                    PlayBotPlayer();
+                }
+            }
+        }
+
+        private void ClearPlayingCard() {
             for (int i = 0; i < 4; i++) {
                 if (playingCards[i] != null) {
                     Destroy(playingCards[i].gameObject);
@@ -37,7 +58,18 @@ namespace CallBreak {
         }
 
         public void PlayBotPlayer() {
-            Invoke(nameof(PlayBotPlayerDelay), 1f);
+            if (playingCardIndex == 4) {
+                Invoke(nameof(RoundComplete), 1f);
+            }
+            else {
+                Invoke(nameof(PlayBotPlayerDelay), 1f);
+            }
+        }
+
+        public void PlayRealPlayer() {
+            if (playingCardIndex == 4) {
+                Invoke(nameof(RoundComplete), 1f);
+            }
         }
 
         private void PlayBotPlayerDelay() {
@@ -47,14 +79,13 @@ namespace CallBreak {
 
             switch (runingPlayer) {
                 case Player.Right:
-                    uIManager.ClickCardByBot(BotPlayLogicalCard(rightPlayerCards));
+                    uiManager.ClickCardByBot(BotPlayLogicalCard(rightPlayerCards));
                 break;
                 case Player.Top:
-                    uIManager.ClickCardByBot(BotPlayLogicalCard(topPlayerCards));
+                    uiManager.ClickCardByBot(BotPlayLogicalCard(topPlayerCards));
                 break;
                 case Player.Left:
-                    uIManager.ClickCardByBot(BotPlayLogicalCard(leftPlayerCards));
-                    round++;
+                    uiManager.ClickCardByBot(BotPlayLogicalCard(leftPlayerCards));
                 break;
             }
         }
@@ -113,6 +144,72 @@ namespace CallBreak {
             }
 
             return null;
+        }
+    
+        public bool IsCardValidForMoveByPlayer(Card card) {
+            if (IsBoardEmpty()) {
+                return true;
+            }
+            
+            return false;
+        }
+        // Get round
+        private Player RoundWinner() {
+            // check super card
+            bool isSuperCardFound = false;
+            for (int i = 0; i < 4; i++) {
+                if (playingCards[i].type == CardType.Spade) {
+                    isSuperCardFound = true;
+                    break;
+                }
+            }
+
+            if (isSuperCardFound) {
+                Card bigSuperCard = null;
+                int playerIndex = 0;
+                for (int i = 0; i < 4; i++) {
+                    if (playingCards[i].type == CardType.Spade) {
+                        if (bigSuperCard == null) {
+                            bigSuperCard = playingCards[i];
+                            playerIndex = i;
+                        }
+                        else {
+                            if ((int)bigSuperCard.cName < (int)playingCards[i].cName) {
+                                bigSuperCard = playingCards[i];
+                                playerIndex = i;
+                            }
+                        }
+                    }
+                }
+                return playingPlayers[playerIndex];
+            }
+            else {
+                // check same type of card
+                bool isSameTypeCardFound = false;
+                for (int i = 1; i < 4; i++) {
+                    if (playingCards[i].type == playingCards[0].type) {
+                        isSameTypeCardFound = true;
+                        break;
+                    }
+                }
+
+                if (isSameTypeCardFound) {
+                    Card bigSameCard = playingCards[0];
+                    int playerIndex = 0;
+                    for (int i = 1; i < 4; i++) {
+                        if (playingCards[i].type == playingCards[0].type) {
+                            if ((int)bigSameCard.cName < (int)playingCards[i].cName) {
+                                bigSameCard = playingCards[i];
+                                playerIndex = i;
+                            }
+                        }
+                    }
+                    return playingPlayers[playerIndex];
+                }
+                else {
+                    return playingPlayers[0];
+                }
+            }
         }
     }
 }

@@ -1240,7 +1240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 305563b0409fd734992104de54e4935e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uIManager: {fileID: 445976162}
+  uiManager: {fileID: 445976162}
   cardSpriteRef: {fileID: 3528227344488433205, guid: 742e55c906f427f428be83b7d11a861c, type: 3}
   bottomPlayerCards:
   - {fileID: 0}
@@ -1300,10 +1300,6 @@ MonoBehaviour:
   - {fileID: 0}
   runingPlayer: 0
   round: 0
-  Spade: []
-  Heart: []
-  Clover: []
-  Diamond: []
 --- !u!4 &1403447905
 Transform:
   m_ObjectHideFlags: 0

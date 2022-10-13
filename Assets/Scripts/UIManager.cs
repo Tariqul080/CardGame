@@ -110,14 +110,19 @@ namespace CallBreak {
 
         private void ClickCard(Card card) {
             if (gameManager.runingPlayer == Player.Bottom) {
-                playerCardCounter--;
-                card.transform.parent = allCardParent;
-                card.transform.localPosition = cardOnBoard[0].localPosition;
-                gameManager.AddPlayingCard(card);
-                playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * playerCardCounter, playerCardPanel.sizeDelta.y);
+                if (gameManager.IsCardValidForMoveByPlayer(card)) {
+                    playerCardCounter--;
+                    card.transform.parent = allCardParent;
+                    card.transform.localPosition = cardOnBoard[0].localPosition;
+                    gameManager.AddPlayingCard(card, Player.Bottom);
+                    playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * playerCardCounter, playerCardPanel.sizeDelta.y);
 
-                gameManager.runingPlayer = Player.Right;
-                gameManager.PlayBotPlayer();
+                    gameManager.runingPlayer = Player.Right;
+                    gameManager.PlayBotPlayer();
+                }
+                else {
+                    Debug.Log("Selected card is invalid!");
+                }
             }
         }
 
@@ -125,41 +130,32 @@ namespace CallBreak {
             if (card == null) {
                 return;
             }
-            
+
             switch (gameManager.runingPlayer) {
                 case Player.Right:
                     card.transform.localPosition = cardOnBoard[1].localPosition;
-                    gameManager.AddPlayingCard(card);
+                    gameManager.AddPlayingCard(card, Player.Right);
                     gameManager.runingPlayer = Player.Top;
                     gameManager.PlayBotPlayer();
                 break;
                 case Player.Top:
                     card.transform.localPosition = cardOnBoard[2].localPosition;
-                    gameManager.AddPlayingCard(card);
+                    gameManager.AddPlayingCard(card, Player.Top);
                     gameManager.runingPlayer = Player.Left;
                     gameManager.PlayBotPlayer();
                 break;
                 case Player.Left:
                     card.transform.localPosition = cardOnBoard[3].localPosition;
-                    gameManager.AddPlayingCard(card);
-
-                    Invoke(nameof(FinishRound), 1f);
+                    gameManager.AddPlayingCard(card, Player.Left);
+                    gameManager.runingPlayer = Player.Bottom;
+                    gameManager.PlayRealPlayer();
                 break;
             }
             card.gameObject.SetActive(true);
             card.FlipCard(true);
         }
 
-        private void FinishRound() {
-            gameManager.ClearPlayingCard();
-            gameManager.runingPlayer = Player.Bottom;
-
-            if (gameManager.round > 12) {
-                GameOver();
-            }
-        }
-
-        private void GameOver() {
+        public void GameOver() {
             Debug.Log("Game Over");
         }
     }
