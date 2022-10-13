@@ -145,7 +145,7 @@ namespace CallBreak {
             }
             else {
                 if (runingPlayer == Player.Bottom) {
-                    PlayBotPlayer();
+                    PlayRealPlayer();
                 }
                 else {
                     PlayBotPlayer();
@@ -171,9 +171,16 @@ namespace CallBreak {
             }
         }
 
+        private void ShowYourTurn() {
+            uiManager.ShowYourTurnTxt(true);
+        }
+
         public void PlayRealPlayer() {
             if (playingCardIndex == 4) {
                 Invoke(nameof(RoundComplete), 1f);
+            }
+            else {
+                Invoke(nameof(ShowYourTurn), 1f);
             }
         }
 

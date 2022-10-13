@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace CallBreak {
     public class UIManager : MonoBehaviour {
@@ -16,6 +17,10 @@ namespace CallBreak {
 
         [Header("Card On Board")]
         [SerializeField] private Transform[] cardOnBoard = new Transform[4];
+        [SerializeField] private GameObject yourTurnTxt = null;
+        [SerializeField] private GameObject invalidCardTxt = null;
+        [SerializeField] private GameObject gameOverObj = null;
+
 
         private Card[] allCards = new Card[52];
 
@@ -37,7 +42,11 @@ namespace CallBreak {
             CardMaker();
             Shuffle(allCards);
             Invoke(nameof(DistributeCards), 1f);
-           
+        }
+
+        public void ClickPlayAgainButton() {
+            gameOverObj.SetActive(false);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         private void CardMaker() {
@@ -93,6 +102,8 @@ namespace CallBreak {
                 gameManager.bottomPlayerCards[i].FlipCard(true);
             }
             playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * 13f, playerCardPanel.sizeDelta.y);
+
+            yourTurnTxt.SetActive(true);
         }
 
         private void SortCards(Card[] arr) {
@@ -110,9 +121,7 @@ namespace CallBreak {
 
         private void ClickCard(Card card) {
             if (gameManager.runingPlayer == Player.Bottom) {
-                 Debug.Log("Selected card is invalid!   333");
                 if (gameManager.CheckBottonPlayerValidClick(card)) {
-                     Debug.Log("Selected card is invalid!   444");
                     playerCardCounter--;
                     card.transform.parent = allCardParent;
                     card.transform.localPosition = cardOnBoard[0].localPosition;
@@ -121,9 +130,10 @@ namespace CallBreak {
 
                     gameManager.runingPlayer = Player.Right;
                     gameManager.PlayBotPlayer();
+                    yourTurnTxt.SetActive(false);
                 }
                 else {
-                    Debug.Log("Selected card is invalid!");
+                    ShowInvalidCardTxt();
                 }
             }
         }
@@ -132,6 +142,7 @@ namespace CallBreak {
             if (card == null) {
                 return;
             }
+            yourTurnTxt.SetActive(false);
 
             switch (gameManager.runingPlayer) {
                 case Player.Right:
@@ -157,8 +168,27 @@ namespace CallBreak {
             card.FlipCard(true);
         }
 
+        public void ShowYourTurnTxt(bool isShow) {
+            yourTurnTxt.SetActive(isShow);
+        }
+
+        public void ShowInvalidCardTxt() {
+            yourTurnTxt.SetActive(false);
+            invalidCardTxt.SetActive(true);
+            Invoke(nameof(HideInvalidCard), 0.7f);
+        }
+
+        private void HideInvalidCard() {
+            invalidCardTxt.SetActive(false);
+            yourTurnTxt.SetActive(true);
+        }
+
         public void GameOver() {
-            Debug.Log("Game Over");
+            Invoke(nameof(ShowGameOverDelay), 1f);
+        }
+
+        private void ShowGameOverDelay() {
+            gameOverObj.SetActive(true);
         }
     }
 }
