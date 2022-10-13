@@ -18,7 +18,6 @@ namespace CallBreak {
         [SerializeField] private Transform[] cardOnBoard = new Transform[4];
 
         private Card[] allCards = new Card[52];
-        private Card[] playingCards = new Card[4];
 
         private int playerCardCounter = 13;
 
@@ -82,7 +81,7 @@ namespace CallBreak {
                 }
             }
 
-            // short all player cards
+            // sort all player cards
             SortCards(gameManager.bottomPlayerCards);
             SortCards(gameManager.rightPlayerCards);
             SortCards(gameManager.topPlayerCards);
@@ -114,7 +113,7 @@ namespace CallBreak {
                 playerCardCounter--;
                 card.transform.parent = allCardParent;
                 card.transform.localPosition = cardOnBoard[0].localPosition;
-                playingCards[0] = card;
+                gameManager.AddPlayingCard(card);
                 playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * playerCardCounter, playerCardPanel.sizeDelta.y);
 
                 gameManager.runingPlayer = Player.Right;
@@ -123,22 +122,26 @@ namespace CallBreak {
         }
 
         public void ClickCardByBot(Card card) {
+            if (card == null) {
+                return;
+            }
+            
             switch (gameManager.runingPlayer) {
                 case Player.Right:
                     card.transform.localPosition = cardOnBoard[1].localPosition;
-                    playingCards[1] = card;
+                    gameManager.AddPlayingCard(card);
                     gameManager.runingPlayer = Player.Top;
                     gameManager.PlayBotPlayer();
                 break;
                 case Player.Top:
                     card.transform.localPosition = cardOnBoard[2].localPosition;
-                    playingCards[2] = card;
+                    gameManager.AddPlayingCard(card);
                     gameManager.runingPlayer = Player.Left;
                     gameManager.PlayBotPlayer();
                 break;
                 case Player.Left:
                     card.transform.localPosition = cardOnBoard[3].localPosition;
-                    playingCards[3] = card;
+                    gameManager.AddPlayingCard(card);
 
                     Invoke(nameof(FinishRound), 1f);
                 break;
@@ -148,9 +151,7 @@ namespace CallBreak {
         }
 
         private void FinishRound() {
-            for (int i = 0; i < 4; i++) {
-                Destroy(playingCards[i].gameObject);
-            }
+            gameManager.ClearPlayingCard();
             gameManager.runingPlayer = Player.Bottom;
 
             if (gameManager.round > 12) {
