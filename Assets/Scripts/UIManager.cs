@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CallBreak {
@@ -38,11 +39,13 @@ namespace CallBreak {
             CardMaker();
             Shuffle(allCards);
             Invoke(nameof(ShortPlayerCards), 1f);
+            Invoke(nameof(shortCard), 2f);
+           
         }
 
         private void CardMaker() {
             int cardType = 0, cardIndex = 0;
-            for(int i = 0; i < 52 ; i++) {
+            for (int i = 0; i < 52 ; i++) {
                 Card card = Instantiate(cardFeb,allCardParent);
                 card.Click = ClickCard;
 
@@ -59,11 +62,11 @@ namespace CallBreak {
         }
 
         private void ShortPlayerCards() {
-            for(int i = 0; i < 52 ; i++) {
+            for (int i = 0; i < 52 ; i++) {
                 Card card = allCards[i];
 
                 if (i < 13) {
-                    card.transform.parent = playerCardPanel;
+                   // card.transform.parent = playerCardPanel;
                     card.FlipCard(true);
                 }
                 else {
@@ -84,9 +87,45 @@ namespace CallBreak {
                     gameManager.leftPlayerCards[i - 39] = card;
                 }
             }
-            playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * 13f, playerCardPanel.sizeDelta.y);
+            playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * 13f, playerCardPanel.sizeDelta.y); //?
         }
 
+        private void shortCard() {
+           gameManager.StoreCardByGroup(gameManager.botttomPlyerCardsList, gameManager.bottomPlayerCards);
+           ShortingCardByValu(gameManager.botttomPlyerCardsList);
+           gameManager.StoreCardByGroup(gameManager.rightPlayerCardsList, gameManager.rightPlayerCards);
+           ShortingCardByValu(gameManager.rightPlayerCardsList);
+           gameManager.StoreCardByGroup(gameManager.topPlyerCardsList, gameManager.topPlayerCards);
+           ShortingCardByValu(gameManager.topPlyerCardsList);
+           gameManager.StoreCardByGroup(gameManager.leftotttomPlyerList, gameManager.leftPlayerCards);
+           ShortingCardByValu(gameManager.leftotttomPlyerList);
+
+            for (int i = 0 ; i < 4; i++) {
+                List<Card> Bottom = gameManager.botttomPlyerCardsList[i];
+                int lenght = Bottom.Count;
+                for (int j = 0 ; j < lenght ; j++) {
+                    Card card = Bottom[j];
+                    card.transform.parent = playerCardPanel;
+                }
+            }
+        }
+
+        private void ShortingCardByValu(List<List<Card>> cardList) { 
+            for (int i = 0; i < 4; i++) {
+                List<Card> cards = cardList[i];
+                int lenght = cards.Count;
+                Card card;
+                for (int j = 0; j < lenght - 2; j++) {
+                    for (int k = 0; k < lenght -2; k++) {
+                        if((int)cards[k].cName < (int)cards[k+1].cName) {
+                            card = cards[k+1];
+                            cards[k+1] = cards[k];
+                            cards[k] = card;
+                        }
+                    }
+                } 
+            }
+        }
         private void ClickCard(Card card) {
             if (gameManager.runingPlayer == Player.Bottom) {
                 playerCardCounter--;
