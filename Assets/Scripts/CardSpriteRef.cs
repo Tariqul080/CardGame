@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CallBreak {
     public enum CardType {
-        Spade, Heart, Clover, Diamond 
+        Spade = 0, Heart, Clover, Diamond
     }
 
     public enum CardName{

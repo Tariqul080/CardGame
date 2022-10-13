@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CallBreak {
@@ -38,8 +37,7 @@ namespace CallBreak {
             playButton.SetActive(false);
             CardMaker();
             Shuffle(allCards);
-            Invoke(nameof(ShortPlayerCards), 1f);
-            Invoke(nameof(shortCard), 2f);
+            Invoke(nameof(DistributeCards), 1f);
            
         }
 
@@ -61,15 +59,11 @@ namespace CallBreak {
             }
         }
 
-        private void ShortPlayerCards() {
+        private void DistributeCards() {
             for (int i = 0; i < 52 ; i++) {
                 Card card = allCards[i];
 
-                if (i < 13) {
-                   // card.transform.parent = playerCardPanel;
-                    card.FlipCard(true);
-                }
-                else {
+                if (i > 12) {
                     card.gameObject.SetActive(false);
                 }
 
@@ -87,45 +81,34 @@ namespace CallBreak {
                     gameManager.leftPlayerCards[i - 39] = card;
                 }
             }
-            playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * 13f, playerCardPanel.sizeDelta.y); //?
+
+            // short all player cards
+            SortCards(gameManager.bottomPlayerCards);
+            SortCards(gameManager.rightPlayerCards);
+            SortCards(gameManager.topPlayerCards);
+            SortCards(gameManager.leftPlayerCards);
+
+            // Distribute card to player
+            for (int i = 0; i < 13; i++) {
+                gameManager.bottomPlayerCards[i].transform.parent = playerCardPanel;
+                gameManager.bottomPlayerCards[i].FlipCard(true);
+            }
+            playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * 13f, playerCardPanel.sizeDelta.y);
         }
 
-        private void shortCard() {
-           gameManager.StoreCardByGroup(gameManager.botttomPlyerCardsList, gameManager.bottomPlayerCards);
-           ShortingCardByValu(gameManager.botttomPlyerCardsList);
-           gameManager.StoreCardByGroup(gameManager.rightPlayerCardsList, gameManager.rightPlayerCards);
-           ShortingCardByValu(gameManager.rightPlayerCardsList);
-           gameManager.StoreCardByGroup(gameManager.topPlyerCardsList, gameManager.topPlayerCards);
-           ShortingCardByValu(gameManager.topPlyerCardsList);
-           gameManager.StoreCardByGroup(gameManager.leftotttomPlyerList, gameManager.leftPlayerCards);
-           ShortingCardByValu(gameManager.leftotttomPlyerList);
-
-            for (int i = 0 ; i < 4; i++) {
-                List<Card> Bottom = gameManager.botttomPlyerCardsList[i];
-                int lenght = Bottom.Count;
-                for (int j = 0 ; j < lenght ; j++) {
-                    Card card = Bottom[j];
-                    card.transform.parent = playerCardPanel;
+        private void SortCards(Card[] arr) {
+            int n = arr.Length;
+            for (int i = 0; i < n - 1; i++) {
+                for (int j = 0; j < n - i - 1; j++) {
+                    if (arr[j].Value < arr[j + 1].Value) {
+                        Card temp = arr[j];
+                        arr[j] = arr[j + 1];
+                        arr[j + 1] = temp;
+                    }
                 }
             }
         }
 
-        private void ShortingCardByValu(List<List<Card>> cardList) { 
-            for (int i = 0; i < 4; i++) {
-                List<Card> cards = cardList[i];
-                int lenght = cards.Count;
-                Card card;
-                for (int j = 0; j < lenght - 2; j++) {
-                    for (int k = 0; k < lenght -2; k++) {
-                        if((int)cards[k].cName < (int)cards[k+1].cName) {
-                            card = cards[k+1];
-                            cards[k+1] = cards[k];
-                            cards[k] = card;
-                        }
-                    }
-                } 
-            }
-        }
         private void ClickCard(Card card) {
             if (gameManager.runingPlayer == Player.Bottom) {
                 playerCardCounter--;
