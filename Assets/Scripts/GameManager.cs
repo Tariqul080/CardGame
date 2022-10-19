@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 namespace CallBreak {
     public enum Player {
@@ -137,7 +138,8 @@ namespace CallBreak {
         private void RoundComplete() {
             round++;
             Player winner = RoundWinner();
-            ClearPlayingCard();
+            MoveToRounWinerAllPlayingCards(winner);
+            Invoke(nameof(ClearPlayingCard), 1f);
             runingPlayer = winner;
 
             if (round > 12) {
@@ -150,6 +152,33 @@ namespace CallBreak {
                 else {
                     PlayBotPlayer();
                 }
+            }
+        }
+
+        private void MoveToRounWinerAllPlayingCards(Player player)
+        {
+            int winingPalyerIndex = (int)player;
+            switch (winingPalyerIndex) {
+                case 0 :
+                    ChangePlayingCardTrans(uiManager.bottomPlayerPosition);
+                    break;
+                case 1 :
+                    ChangePlayingCardTrans(uiManager.rightPlayerPosition);
+                    break;
+                case 2 :
+                    ChangePlayingCardTrans(uiManager.topPlayerPosition);
+                    break;
+                case 3 :
+                    ChangePlayingCardTrans(uiManager.leftPlayerPosition);
+                    break;
+            }
+        }
+
+        private void ChangePlayingCardTrans(RectTransform transform)
+        {
+            for (int i = 0; i < 4; i++) {
+                Card card = playingCards[i];
+                card.transform.DOLocalMove(transform.localPosition, 0.5f);
             }
         }
 
@@ -192,13 +221,13 @@ namespace CallBreak {
             switch (runingPlayer) {
                 case Player.Right:
                     uiManager.ClickCardByBot(BotPlayLogicalCard(rightPlayerCards));
-                break;
+                    break;
                 case Player.Top:
                     uiManager.ClickCardByBot(BotPlayLogicalCard(topPlayerCards));
-                break;
+                    break;
                 case Player.Left:
                     uiManager.ClickCardByBot(BotPlayLogicalCard(leftPlayerCards));
-                break;
+                    break;
             }
         }
 

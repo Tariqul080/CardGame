@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 namespace CallBreak {
     public class UIManager : MonoBehaviour {
@@ -8,9 +9,13 @@ namespace CallBreak {
         [SerializeField] private Card cardFeb = null;
         [SerializeField] private Transform allCardParent = null;
         [SerializeField] private GameObject playButton = null;
-        [SerializeField] private GameObject allPlayerInformation = null; 
-        
-        [Header("Card Pool")] 
+        [SerializeField] private GameObject allPlayerInformation = null;
+
+        [Header("Card Pool")]
+        [SerializeField] public RectTransform bottomPlayerPosition = null;
+        [SerializeField] public RectTransform rightPlayerPosition = null;
+        [SerializeField] public RectTransform topPlayerPosition = null;
+        [SerializeField] public RectTransform leftPlayerPosition = null;
         [SerializeField] private RectTransform cardSize = null;
         [SerializeField] private RectTransform playerCardPanel = null;
         [SerializeField] private GameManager gameManager = null;
@@ -70,11 +75,6 @@ namespace CallBreak {
         private void DistributeCards() {
             for (int i = 0; i < 52 ; i++) {
                 Card card = allCards[i];
-
-                if (i > 12) {
-                    card.gameObject.SetActive(false);
-                }
-
                 // store cards
                 if (i < 13) { // 0-12
                     gameManager.bottomPlayerCards[i] = card;
@@ -96,14 +96,48 @@ namespace CallBreak {
             SortCards(gameManager.topPlayerCards);
             SortCards(gameManager.leftPlayerCards);
 
-            // Distribute card to player
-            for (int i = 0; i < 13; i++) {
-                gameManager.bottomPlayerCards[i].transform.parent = playerCardPanel;
-                gameManager.bottomPlayerCards[i].FlipCard(true);
-            }
+            DistributeCardToallPlayer();
+
             playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * 13f, playerCardPanel.sizeDelta.y);
 
             yourTurnTxt.SetActive(true);
+        }
+
+        private void DistributeCardToallPlayer()
+        {
+            for (int i = 0; i < 52; i++) {
+                if (i < 13) {
+                    Card card = gameManager.bottomPlayerCards[i];
+                    card.transform.DOLocalMove(bottomPlayerPosition.localPosition, 1f).OnComplete(() => {
+                        card.transform.parent = playerCardPanel;
+                        card.FlipCard(true);
+                    });
+                }
+                else if (i < 26)
+                {
+                    Card card = gameManager.rightPlayerCards[i-13];
+                    card.transform.DOLocalMove(rightPlayerPosition.localPosition, 1f).OnComplete(() => {
+                        card.FlipCard(false);
+                        card.gameObject.SetActive(false);
+                    });
+                }
+                else if (i < 39)
+                {
+                    Card card = gameManager.topPlayerCards[i-26];
+                    card.transform.DOLocalMove(topPlayerPosition.localPosition, 1f).OnComplete(() => {
+                        card.FlipCard(false);
+                        card.gameObject.SetActive(false);
+                    });
+                }
+                else
+                {
+                    Card card = gameManager.leftPlayerCards[i-39];
+                    card.transform.DOLocalMove(leftPlayerPosition.localPosition, 1f).OnComplete(() => {
+                        card.FlipCard(false);
+                        card.gameObject.SetActive(false);
+                    });
+                }
+            }
         }
 
         private void SortCards(Card[] arr) {
@@ -124,13 +158,13 @@ namespace CallBreak {
                 if (gameManager.CheckBottonPlayerValidClick(card)) {
                     playerCardCounter--;
                     card.transform.parent = allCardParent;
-                    card.transform.localPosition = cardOnBoard[0].localPosition;
-                    gameManager.AddPlayingCard(card, Player.Bottom);
-                    playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * playerCardCounter, playerCardPanel.sizeDelta.y);
-
                     gameManager.runingPlayer = Player.Right;
-                    gameManager.PlayBotPlayer();
-                    yourTurnTxt.SetActive(false);
+                    card.transform.DOLocalMove(cardOnBoard[0].localPosition, 0.5f).OnComplete(() => {
+                        gameManager.AddPlayingCard(card, Player.Bottom);
+                        playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * playerCardCounter, playerCardPanel.sizeDelta.y);
+                        gameManager.PlayBotPlayer();
+                        yourTurnTxt.SetActive(false);
+                    });
                 }
                 else {
                     ShowInvalidCardTxt();
@@ -146,22 +180,28 @@ namespace CallBreak {
 
             switch (gameManager.runingPlayer) {
                 case Player.Right:
-                    card.transform.localPosition = cardOnBoard[1].localPosition;
-                    gameManager.AddPlayingCard(card, Player.Right);
-                    gameManager.runingPlayer = Player.Top;
-                    gameManager.PlayBotPlayer();
+                    card.transform.DOLocalMove(cardOnBoard[1].localPosition, 0.5f).OnComplete(() => {
+                        gameManager.AddPlayingCard(card, Player.Right);
+                        gameManager.runingPlayer = Player.Top;
+                        gameManager.PlayBotPlayer();
+                    });
                 break;
                 case Player.Top:
-                    card.transform.localPosition = cardOnBoard[2].localPosition;
-                    gameManager.AddPlayingCard(card, Player.Top);
-                    gameManager.runingPlayer = Player.Left;
-                    gameManager.PlayBotPlayer();
+                    card.transform.DOLocalMove(cardOnBoard[2].localPosition, 0.5f).OnComplete(() => {
+                        gameManager.AddPlayingCard(card, Player.Top);
+                        gameManager.runingPlayer = Player.Left;
+                        gameManager.PlayBotPlayer();
+                    });
+                  
+                 
                 break;
                 case Player.Left:
-                    card.transform.localPosition = cardOnBoard[3].localPosition;
-                    gameManager.AddPlayingCard(card, Player.Left);
-                    gameManager.runingPlayer = Player.Bottom;
-                    gameManager.PlayRealPlayer();
+                    card.transform.DOLocalMove(cardOnBoard[3].localPosition, 0.5f).OnComplete(() => {
+                        gameManager.AddPlayingCard(card, Player.Left);
+                        gameManager.runingPlayer = Player.Bottom;
+                        gameManager.PlayRealPlayer();
+                    });
+                  
                 break;
             }
             card.gameObject.SetActive(true);
