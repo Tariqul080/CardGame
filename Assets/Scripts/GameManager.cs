@@ -21,6 +21,7 @@ namespace CallBreak {
         private Card[] playingCards = new Card[4];
         private Player[] playingPlayers = new Player[4];
         private int playingCardIndex = 0;
+        private bool isRound = false;
         
 
         public void AddPlayingCard(Card card, Player player) {
@@ -136,7 +137,6 @@ namespace CallBreak {
         }
 
         private void RoundComplete() {
-            round++;
             Player winner = RoundWinner();
             MoveToRounWinerAllPlayingCards(winner);
             Invoke(nameof(ClearPlayingCard), 1f);
@@ -186,9 +186,13 @@ namespace CallBreak {
             for (int i = 0; i < 4; i++) {
                 if (playingCards[i] != null) {
                     Destroy(playingCards[i].gameObject);
+                    if (i == 3)
+                    {
+                        round++;
+                    }
                 }
+                playingCardIndex = 0;
             }
-            playingCardIndex = 0;
         }
 
         public void PlayBotPlayer() {

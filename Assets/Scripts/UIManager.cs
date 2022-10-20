@@ -25,6 +25,7 @@ namespace CallBreak {
         [SerializeField] private GameObject yourTurnTxt = null;
         [SerializeField] private GameObject invalidCardTxt = null;
         [SerializeField] private GameObject gameOverObj = null;
+        [SerializeField] private float movingTime = 1f;
 
 
         private Card[] allCards = new Card[52];
@@ -108,7 +109,7 @@ namespace CallBreak {
             for (int i = 0; i < 52; i++) {
                 if (i < 13) {
                     Card card = gameManager.bottomPlayerCards[i];
-                    card.transform.DOLocalMove(bottomPlayerPosition.localPosition, 1f).OnComplete(() => {
+                    card.transform.DOLocalMove(bottomPlayerPosition.localPosition, movingTime).OnComplete(() => {
                         card.transform.parent = playerCardPanel;
                         card.FlipCard(true);
                     });
@@ -116,7 +117,7 @@ namespace CallBreak {
                 else if (i < 26)
                 {
                     Card card = gameManager.rightPlayerCards[i-13];
-                    card.transform.DOLocalMove(rightPlayerPosition.localPosition, 1f).OnComplete(() => {
+                    card.transform.DOLocalMove(rightPlayerPosition.localPosition, movingTime).OnComplete(() => {
                         card.FlipCard(false);
                         card.gameObject.SetActive(false);
                     });
@@ -124,7 +125,7 @@ namespace CallBreak {
                 else if (i < 39)
                 {
                     Card card = gameManager.topPlayerCards[i-26];
-                    card.transform.DOLocalMove(topPlayerPosition.localPosition, 1f).OnComplete(() => {
+                    card.transform.DOLocalMove(topPlayerPosition.localPosition, movingTime).OnComplete(() => {
                         card.FlipCard(false);
                         card.gameObject.SetActive(false);
                     });
@@ -132,7 +133,7 @@ namespace CallBreak {
                 else
                 {
                     Card card = gameManager.leftPlayerCards[i-39];
-                    card.transform.DOLocalMove(leftPlayerPosition.localPosition, 1f).OnComplete(() => {
+                    card.transform.DOLocalMove(leftPlayerPosition.localPosition, movingTime).OnComplete(() => {
                         card.FlipCard(false);
                         card.gameObject.SetActive(false);
                     });
@@ -159,7 +160,7 @@ namespace CallBreak {
                     playerCardCounter--;
                     card.transform.parent = allCardParent;
                     gameManager.runingPlayer = Player.Right;
-                    card.transform.DOLocalMove(cardOnBoard[0].localPosition, 0.5f).OnComplete(() => {
+                    card.transform.DOLocalMove(cardOnBoard[0].localPosition, movingTime).OnComplete(() => {
                         gameManager.AddPlayingCard(card, Player.Bottom);
                         playerCardPanel.sizeDelta = new Vector2(cardSize.sizeDelta.x * playerCardCounter, playerCardPanel.sizeDelta.y);
                         gameManager.PlayBotPlayer();
@@ -180,14 +181,14 @@ namespace CallBreak {
 
             switch (gameManager.runingPlayer) {
                 case Player.Right:
-                    card.transform.DOLocalMove(cardOnBoard[1].localPosition, 0.5f).OnComplete(() => {
+                    card.transform.DOLocalMove(cardOnBoard[1].localPosition, movingTime).OnComplete(() => {
                         gameManager.AddPlayingCard(card, Player.Right);
                         gameManager.runingPlayer = Player.Top;
                         gameManager.PlayBotPlayer();
                     });
                 break;
                 case Player.Top:
-                    card.transform.DOLocalMove(cardOnBoard[2].localPosition, 0.5f).OnComplete(() => {
+                    card.transform.DOLocalMove(cardOnBoard[2].localPosition, movingTime).OnComplete(() => {
                         gameManager.AddPlayingCard(card, Player.Top);
                         gameManager.runingPlayer = Player.Left;
                         gameManager.PlayBotPlayer();
@@ -196,7 +197,7 @@ namespace CallBreak {
                  
                 break;
                 case Player.Left:
-                    card.transform.DOLocalMove(cardOnBoard[3].localPosition, 0.5f).OnComplete(() => {
+                    card.transform.DOLocalMove(cardOnBoard[3].localPosition, movingTime).OnComplete(() => {
                         gameManager.AddPlayingCard(card, Player.Left);
                         gameManager.runingPlayer = Player.Bottom;
                         gameManager.PlayRealPlayer();
